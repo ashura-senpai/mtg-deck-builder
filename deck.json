@@ -1,0 +1,78 @@
+[
+  {
+    "name": "Abrupt Decay",
+    "manaCost": "{B}{G}",
+    "cmc": 2,
+    "colors": [
+      "Black",
+      "Green"
+    ],
+    "colorIdentity": [
+      "B",
+      "G"
+    ],
+    "type": "Instant",
+    "types": [
+      "Instant"
+    ],
+    "rarity": "Rare",
+    "set": "PWCQ",
+    "setName": "World Magic Cup Qualifiers",
+    "text": "This spell can't be countered.\nDestroy target nonland permanent with mana value 3 or less.",
+    "flavor": "The worst part isn't the pain, or the smell, or even the fear of death. It's hearing the clatter of bone on stone and knowing the bones are yours.",
+    "artist": "Seb McKinnon",
+    "number": "2016",
+    "layout": "normal",
+    "watermark": "wotc",
+    "rulings": [
+      {
+        "date": "2021-03-19",
+        "text": "A spell or ability that counters spells can still target Abrupt Decay. When that spell or ability resolves, Abrupt Decay won’t be countered, but any additional effects of the countering spell or ability will still happen."
+      },
+      {
+        "date": "2021-03-19",
+        "text": "The mana value of a token that isn’t a copy of another object is 0. A token that is a copy of another object has the same mana cost as that object."
+      },
+      {
+        "date": "2021-03-19",
+        "text": "If a permanent has {X} in its mana cost, X is considered to be 0."
+      }
+    ],
+    "printings": [
+      "GK1",
+      "MM3",
+      "PLIST",
+      "PRM",
+      "PWCQ",
+      "RTR",
+      "TSR"
+    ],
+    "legalities": [
+      {
+        "format": "Commander",
+        "legality": "Legal"
+      },
+      {
+        "format": "Duel",
+        "legality": "Legal"
+      },
+      {
+        "format": "Legacy",
+        "legality": "Legal"
+      },
+      {
+        "format": "Modern",
+        "legality": "Legal"
+      },
+      {
+        "format": "Pioneer",
+        "legality": "Legal"
+      },
+      {
+        "format": "Vintage",
+        "legality": "Legal"
+      }
+    ],
+    "id": "22222ccd-58b5-5a64-94f0-200daf3caadb"
+  }
+]
