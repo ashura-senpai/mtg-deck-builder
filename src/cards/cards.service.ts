@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DeckService } from '../deck/schemas/deck.service';
+import { DeckService } from '../deck/deck.service';
 import axios from 'axios';
 import * as fs from 'fs';
 
