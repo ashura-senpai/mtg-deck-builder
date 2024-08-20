@@ -4,11 +4,11 @@ import { CommanderController } from './commander/commander.controller';
 import { CommanderService } from './commander/commander.service';
 import { CardsController } from './cards/cards.controller';
 import { CardsService } from './cards/cards.service';
-import { DeckController } from './deck/schemas/deck.controller';
-import { DeckService } from './deck/schemas/deck.service';
+import { DeckController } from './deck/deck.controller';
+import { DeckService } from './deck/deck.service';
 import { Deck, DeckSchema } from './deck/schemas/deck.schema';
-import { DeckModule } from './deck/schemas/deck.module';
-import { UsersModule } from './users//schemas/users.module';
+import { DeckModule } from './deck/deck.module';
+import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
