@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './local-auth.guard';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LoginUserDTO } from 'src/users/dto/user-login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -17,7 +18,7 @@ export class AuthController {
     }
 
     @Post('login')
-    async login(@Body() req) {
-        return this.authService.login(req.user);
+    async login(@Body() loginUserDTO: LoginUserDTO ) {
+        return this.authService.loginUser(loginUserDTO.username,loginUserDTO.password);
     }
 }

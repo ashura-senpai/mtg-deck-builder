@@ -10,6 +10,8 @@ import { Deck, DeckSchema } from './deck/schemas/deck.schema';
 import { DeckModule } from './deck/deck.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -19,7 +21,7 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     AuthModule,
   ],
-  controllers: [CommanderController, CardsController, DeckController],
-  providers: [CommanderService, CardsService, DeckService],
+  controllers: [CommanderController, CardsController, DeckController,AppController],
+  providers: [CommanderService, CardsService, DeckService,AppService],
 })
 export class AppModule { }
