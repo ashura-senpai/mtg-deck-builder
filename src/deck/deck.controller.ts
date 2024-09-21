@@ -15,6 +15,11 @@ export class DeckController {
     return await this.deckService.createDeck(commander, cards);
   }
 
+  @Get('random')
+  async randomDeck() {
+    return await this.deckService.randomDeck();
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAllDecks() {
