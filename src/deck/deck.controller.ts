@@ -4,17 +4,20 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('deck')
 export class DeckController {
-    constructor(private readonly deckService: DeckService) { }
+  constructor(private readonly deckService: DeckService) {}
 
-    @UseGuards(JwtAuthGuard)
-    @Post()
-    async createDeck(@Body('commander') commander: string, @Body('cards') cards: Record<string, any>[]) {
-        return await this.deckService.createDeck(commander, cards);
-    }
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  async createDeck(
+    @Body('commander') commander: string,
+    @Body('cards') cards: Record<string, any>[],
+  ) {
+    return await this.deckService.createDeck(commander, cards);
+  }
 
-    @UseGuards(JwtAuthGuard)
-    @Get()
-    async findAllDecks() {
-        return await this.deckService.findAll();
-    }
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async findAllDecks() {
+    return await this.deckService.findAll();
+  }
 }
