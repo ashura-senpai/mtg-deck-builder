@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CommanderController } from './commander/commander.controller';
-import { CommanderService } from './commander/commander.service';
 import { CardsController } from './cards/cards.controller';
 import { CardsService } from './cards/cards.service';
 import { DeckController } from './deck/deck.controller';
@@ -21,7 +19,7 @@ import { AppController } from './app.controller';
     UsersModule,
     AuthModule,
   ],
-  controllers: [CommanderController, CardsController, DeckController,AppController],
-  providers: [CommanderService, CardsService, DeckService,AppService],
+  controllers: [CardsController, DeckController,AppController],
+  providers: [ CardsService, DeckService,AppService],
 })
 export class AppModule { }
