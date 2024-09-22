@@ -17,22 +17,51 @@ export class DeckService {
   }
 
   async randomDeck() {
-    const ApiCommander = 'https://api.scryfall.com/cards/random?q=is%3Acommander';
-    const commanderData = await axios.get(ApiCommander);
+    const API_Commander = 'https://api.scryfall.com/cards/random?q=is%3Acommander';
+    const commanderData = await axios.get(API_Commander);
     const card = commanderData.data;
     const commanderColor = card.colors;
+    const commander = [];
 
-    const ApiCardsColor = `https://api.magicthegathering.io/v1/cards?colors=${commanderColor.toString()}`;
-    const cardData = await axios.get(ApiCardsColor);
+    commander.push([card.name, commanderColor.toString()]);
 
+    const creatures = [];
 
-    const newDeck = new this.deckModel({
-      commander: card.name,
+    const API_CommonCreature = `https://api.magicthegathering.io/v1/cards?colors=${commanderColor.toString()}&type=creature&rarity=common&pageSize=7&random=true`;
+    const commonCardData = await axios.get(API_CommonCreature);
+    const commonCreature = commonCardData.data.cards;
+
+    commonCreature.forEach((card: any) => {
+      creatures.push([card.name, card.colorIdentity, card.type, card.rarity]);
     });
 
-    // await newDeck.save();
+    const API_UncommonCreature = `https://api.magicthegathering.io/v1/cards?colors=${commanderColor.toString()}&type=creature&rarity=uncommon&pageSize=7&random=true`;
+    const uncommonCardData = await axios.get(API_UncommonCreature);
+    const uncommonCreature = uncommonCardData.data.cards;
 
-    return card.colors.toString();
+    uncommonCreature.forEach((card: any) => {
+      creatures.push([card.name, card.colorIdentity, card.type, card.rarity]);
+    });
+
+    const API_RareCreature = `https://api.magicthegathering.io/v1/cards?colors=${commanderColor.toString()}&type=creature&rarity=rare&pageSize=7&random=true`;
+    const rareCardData = await axios.get(API_RareCreature);
+    const rareCreature = rareCardData.data.cards;
+
+    rareCreature.forEach((card: any) => {
+      creatures.push([card.name, card.colorIdentity, card.type, card.rarity]);
+    });
+
+    const newDeck = new this.deckModel({
+      commander: commander,
+      cards: creatures,
+    });
+
+    await newDeck.save();
+
+    return {
+      message:
+        'O baralho foi criado com sucesso, pórem ele so contem criatura e um commander, terá que adicioanr o terrenos e magias.',
+    };
   }
 
   async findAll(): Promise<Deck[]> {

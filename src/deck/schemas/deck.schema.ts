@@ -3,7 +3,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class Deck {
   @Prop({ required: true })
-  commander: string;
+  commander: Record<string, any>[];
 
   @Prop({ type: [{ type: Object }], required: true })
   cards: Record<string, any>[];
