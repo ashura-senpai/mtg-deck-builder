@@ -20,6 +20,11 @@ export class DeckController {
     return await this.deckService.randomDeck();
   }
 
+  @Post('import')
+  async importDeck(@Body() deckJson: any) {
+    return this.deckService.validateAndSaveDeck(deckJson);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get()
   async findAllDecks() {

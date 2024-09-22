@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Deck } from './schemas/deck.schema';
@@ -16,8 +16,9 @@ export class DeckService {
     return createdDeck.save();
   }
 
-  async randomDeck() {
-    const API_Commander = 'https://api.scryfall.com/cards/random?q=is%3Acommander';
+  public async randomDeck() {
+    const API_Commander =
+      'https://api.scryfall.com/cards/random?q=is%3Acommander';
     const commanderData = await axios.get(API_Commander);
     const card = commanderData.data;
     const commanderColor = card.colors;
@@ -62,6 +63,65 @@ export class DeckService {
       message:
         'O baralho foi criado com sucesso, pórem ele so contem criatura e um commander, terá que adicioanr o terrenos e magias.',
     };
+  }
+
+  async validateAndSaveDeck(deckJson: any) {
+    const commander = deckJson.commander[0];
+    const deck = deckJson.cards;
+
+    if (!commander || !deck) {
+      throw new BadRequestException('Comandante ou baralho ausente');
+    }
+
+    if (deck.length !== 21) {
+      throw new BadRequestException(
+        'O baralho deve conter 21 cards, além do comandante.',
+      );
+    }
+
+    const cardCount: { [cardName: string]: number } = {};
+
+    for (const card of deck) {
+      const cardName = card[0];
+
+      if (cardCount[cardName]) {
+        cardCount[cardName]++;
+      } else {
+        cardCount[cardName] = 1;
+      }
+
+      if (cardCount[cardName] > 1 && !this.isBasicLand(card)) {
+        throw new BadRequestException(`Card duplicado: ${cardName}`);
+      }
+    }
+
+    if (!this.validateColorIdentity(commander, deck)) {
+      throw new BadRequestException(
+        'A identidade de cor do comandante não é respeitada.',
+      );
+    }
+
+    const savedDeck = await this.saveDeckToDatabase(deckJson);
+
+    return { message: 'Baralho válido e importado com sucesso!', savedDeck };
+  }
+
+  //deixei implemetado uma parte de validação das cartas de terreno, caso a gente consiga usar/fazer
+  private isBasicLand(card: any): boolean {
+    const basicLands = ['Plains', 'Island', 'Swamp', 'Mountain', 'Forest'];
+    return basicLands.includes(card[0]);
+  }
+
+  private validateColorIdentity(commander: any, deck: any[]): boolean {
+    const commanderColors = commander[1];
+    return deck.every((card) =>
+      card[1].every((color: string) => commanderColors.includes(color)),
+    );
+  }
+
+  private async saveDeckToDatabase(deckJson: any): Promise<Deck> {
+    const createdDeck = new this.deckModel(deckJson);
+    return createdDeck.save();
   }
 
   async findAll(): Promise<Deck[]> {
