@@ -6,7 +6,11 @@ import axios from 'axios';
 
 @Injectable()
 export class DeckService {
-  constructor(@InjectModel(Deck.name) private deckModel: Model<Deck>) {}
+  constructor(@InjectModel(Deck.name) private deckModel: Model<Deck>) { }
+
+  async findByUserId(userId: string): Promise<Deck[]> {
+    return this.deckModel.find({ owner: userId }).exec();
+  }
 
   async createDeck(
     commander: string,
