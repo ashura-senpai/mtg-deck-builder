@@ -1,8 +1,10 @@
-import { Controller, Get, Post, UseGuards, Body } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards, Body, UseInterceptors } from '@nestjs/common';
 import { DeckService } from './deck.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
+import { CacheInterceptor } from '@nestjs/cache-manager';
+import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('deck')
 export class DeckController {
@@ -35,9 +37,12 @@ export class DeckController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(CacheInterceptor)
+  @CacheKey('my-decks-cache')
+  @CacheTTL(10)
   @Get('my-decks')
   async findMyDecks(req) {
-    const userId = req.user.userId; // a partir do payload JWT
+    const userId = req.user.userId;
     return this.deckService.findByUserId(userId);
   }
 }
