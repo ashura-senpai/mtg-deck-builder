@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { CacheModule } from '@nestjs/cache-manager';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 
 @Module({
   imports: [
@@ -22,6 +23,16 @@ import { CacheModule } from '@nestjs/cache-manager';
     CacheModule.register({
       ttl: 5, //tempo
       max: 50, //num maximo de itens.
+    }),
+    RabbitMQModule.forRoot(RabbitMQModule, {
+      exchanges: [
+        {
+          name: 'deck_exchange',
+          type: 'topic',
+        },
+      ],
+      uri: 'amqp://localhost',
+      connectionInitOptions: { wait: true },
     }),
   ],
   controllers: [CardsController, DeckController, AppController],
