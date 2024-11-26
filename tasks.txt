@@ -1,8 +1,15 @@
 # Entrega dia 01/12/2024 até as 23:59
 
-() TBD |  Implemente um sistema de notificações que informe os usuários sobre atualizações nos baralhos, como adição de novas cartas ou modificações. Isso pode ser feito emitindo mensagens através do RabbitMQ ou Kafka que sejam consumidas por uma aplicação de frontend para exibir notificações instantâneas (frontend opcional).
+1-() TBD |  Implemente um sistema de notificações que informe os usuários sobre atualizações nos baralhos, 
+como adição de novas cartas ou modificações. Isso pode ser feito emitindo mensagens através do RabbitMQ ou 
+Kafka que sejam consumidas por uma aplicação de frontend para exibir notificações instantâneas (frontend opcional).
 
-() Enzo e Rafa | Implemente a funcionalidade de importação de baralhos de forma assíncrona, utilizando RabbitMQ para gerenciamento de filas e WebSockets para notificações em tempo real aos usuários sobre o status da importação.
+2-() Enzo e Rafa | Implemente a funcionalidade de importação de baralhos de forma assíncrona, utilizando 
+RabbitMQ para gerenciamento de filas e WebSockets para notificações em tempo real aos usuários sobre o status da importação.
 
-() TBD | Implemente filas de tarefas com diferentes prioridades para garantir que operações críticas sejam tratadas com maior prioridade. Por exemplo, operações de autenticação podem ter prioridade mais alta em relação a atualizações de baralhos, no nosso caso, usuários autenticados e com permissão de ADM tem prioridade sobre usuários normais.
-Extra: Configure o envio de métricas e eventos para uma ferramenta de monitoramento (como Prometheus ou Grafana) através de mensagens. Isso permite a criação de dashboards em tempo real e configurações de alertas para eventos críticos no sistema.
+3-() TBD | Implemente filas de tarefas com diferentes prioridades para garantir que operações críticas sejam 
+tratadas com maior prioridade. Por exemplo, operações de autenticação podem ter prioridade mais alta em relação 
+a atualizações de baralhos, no nosso caso, usuários autenticados e com permissão de ADM tem prioridade sobre usuários normais.
+----
+Extra: Configure o envio de métricas e eventos para uma ferramenta de monitoramento (como Prometheus ou Grafana) através de mensagens. 
+Isso permite a criação de dashboards em tempo real e configurações de alertas para eventos críticos no sistema.

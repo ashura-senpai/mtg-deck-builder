@@ -1,9 +1,10 @@
+import { Card } from 'src/cards/schema/cards.schema';
+import { Deck } from './schemas/deck.schema';
 import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRabbitMQ, RabbitMQService } from '@golevelup/nestjs-rabbitmq';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Deck } from './schemas/deck.schema';
 import axios from 'axios';
-import { InjectRabbitMQ, RabbitMQService } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class DeckService {
