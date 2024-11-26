@@ -1,4 +1,11 @@
-import { Controller, Get, Post, UseGuards, Body, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Body,
+  UseInterceptors,
+} from '@nestjs/common';
 import { DeckService } from './deck.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
@@ -8,7 +15,7 @@ import { CacheKey, CacheTTL } from '@nestjs/cache-manager';
 
 @Controller('deck')
 export class DeckController {
-  constructor(private readonly deckService: DeckService) { }
+  constructor(private readonly deckService: DeckService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()

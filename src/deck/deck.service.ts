@@ -7,12 +7,12 @@ import { InjectRabbitMQ, RabbitMQService } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class DeckService {
-  constructor(@InjectModel(Deck.name) private deckModel: Model<Deck>) { }
-  @InjectRabbitMQ() private readonly rabbitMQService: RabbitMQService
+  constructor(@InjectModel(Deck.name) private deckModel: Model<Deck>) {}
+  @InjectRabbitMQ() private readonly rabbitMQService: RabbitMQService;
 
   private async fetchCreatures(
     commanderColor: string[],
-    rarity: string
+    rarity: string,
   ): Promise<Card[]> {
     const url = `https://api.magicthegathering.io/v1/cards?colors=${commanderColor.join(',')}&type=creature&rarity=${rarity}&pageSize=7&random=true`;
     try {
