@@ -8,7 +8,25 @@ import { InjectRabbitMQ, RabbitMQService } from '@golevelup/nestjs-rabbitmq';
 @Injectable()
 export class DeckService {
   constructor(@InjectModel(Deck.name) private deckModel: Model<Deck>) { }
+  @InjectRabbitMQ() private readonly rabbitMQService: RabbitMQService
 
+  private async fetchCreatures(
+    commanderColor: string[],
+    rarity: string
+  ): Promise<Card[]> {
+    const url = `https://api.magicthegathering.io/v1/cards?colors=${commanderColor.join(',')}&type=creature&rarity=${rarity}&pageSize=7&random=true`;
+    try {
+      const response = await axios.get(url);
+      return response.data.cards.map((card: any) => ({
+        name: card.name,
+        colorIdentity: card.colorIdentity,
+        type: card.type,
+        rarity: card.rarity,
+      }));
+    } catch (error) {
+      throw new BadRequestException('Erro ao buscar criaturas da API externa.');
+    }
+  }
 
   async findByUserId(userId: string): Promise<Deck[]> {
     return this.deckModel.find({ owner: userId }).exec();
