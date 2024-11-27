@@ -1,33 +1,23 @@
-import { Card } from 'src/cards/schema/cards.schema';
-import { Deck } from './schemas/deck.schema';
-import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRabbitMQ, RabbitMQService } from '@golevelup/nestjs-rabbitmq';
+import {
+  BadRequestException,
+  HttpStatus,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
+import { DeckGateway } from './deckGateway';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { Deck } from './schemas/deck.schema';
 import axios from 'axios';
+import { ClientProxy } from '@nestjs/microservices/client/client-proxy';
 
 @Injectable()
 export class DeckService {
-  constructor(@InjectModel(Deck.name) private deckModel: Model<Deck>) {}
-  @InjectRabbitMQ() private readonly rabbitMQService: RabbitMQService;
-
-  private async fetchCreatures(
-    commanderColor: string[],
-    rarity: string,
-  ): Promise<Card[]> {
-    const url = `https://api.magicthegathering.io/v1/cards?colors=${commanderColor.join(',')}&type=creature&rarity=${rarity}&pageSize=7&random=true`;
-    try {
-      const response = await axios.get(url);
-      return response.data.cards.map((card: any) => ({
-        name: card.name,
-        colorIdentity: card.colorIdentity,
-        type: card.type,
-        rarity: card.rarity,
-      }));
-    } catch (error) {
-      throw new BadRequestException('Erro ao buscar criaturas da API externa.');
-    }
-  }
+  constructor(
+    @InjectModel(Deck.name) private deckModel: Model<Deck>,
+    @Inject('DECK_IMPORT_QUEUE') private client: ClientProxy,
+    private readonly deckGateway: DeckGateway,
+  ) {}
 
   async findByUserId(userId: string): Promise<Deck[]> {
     return this.deckModel.find({ owner: userId }).exec();
@@ -90,6 +80,17 @@ export class DeckService {
     };
   }
 
+  async processImport(deckJson: any, clientId: string) {
+    this.deckGateway.notifyImportStatus(clientId, 'Importação iniciada...');
+
+    await this.saveDeckToDatabase(deckJson);
+
+    this.deckGateway.notifyImportStatus(
+      clientId,
+      'Importação concluída com sucesso!',
+    );
+  }
+
   async validateAndSaveDeck(deckJson: any) {
     const commander = deckJson.commander[0];
     const deck = deckJson.cards;
@@ -126,9 +127,9 @@ export class DeckService {
       );
     }
 
-    const savedDeck = await this.saveDeckToDatabase(deckJson);
+    this.client.emit('import_deck', deckJson);
 
-    return { message: 'Baralho válido e importado com sucesso!', savedDeck };
+    return { message: 'O processo de importação foi iniciado com sucesso.' };
   }
 
   //deixei implemetado uma parte de validação das cartas de terreno, caso a gente consiga usar/fazer
@@ -144,7 +145,7 @@ export class DeckService {
     );
   }
 
-  private async saveDeckToDatabase(deckJson: any): Promise<Deck> {
+  async saveDeckToDatabase(deckJson: any): Promise<Deck> {
     const createdDeck = new this.deckModel(deckJson);
     return createdDeck.save();
   }
