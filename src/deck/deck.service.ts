@@ -99,10 +99,6 @@ export class DeckService {
       { new: true },
     );
 
-    if (!updatedDeck) {
-      throw new Error('Deck not found');
-    }
-
     const notification = {
 
       type: 'Atualização',
