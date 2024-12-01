@@ -12,6 +12,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { DeckService } from './deck/deck.service';
 import { MetricsModule } from './metrics/metrics.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MetricsModule } from './metrics/metrics.module';
     UsersModule,
     AuthModule,
     MetricsModule,
+    NotificationsModule,
     CacheModule.register({
       ttl: 5,
       max: 50,

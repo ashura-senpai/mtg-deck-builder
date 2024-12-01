@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { Deck } from './schemas/deck.schema';
 import axios from 'axios';
 import { ClientProxy } from '@nestjs/microservices/client/client-proxy';
+import { UpdateDeckDto } from './dto/updateDeck.dto';
 
 @Injectable()
 export class DeckService {
@@ -28,6 +29,16 @@ export class DeckService {
     cards: Record<string, any>[],
   ): Promise<Deck> {
     const createdDeck = new this.deckModel({ commander, cards });
+
+    const notification = {
+      type: 'Carta Adicionado',
+      cards,
+      timestamp: new Date().toISOString(),
+    };
+
+    console.log("Notificação: ", notification)
+    this.client.emit('deck.notifications', notification);
+
     return createdDeck.save();
   }
 
@@ -78,6 +89,31 @@ export class DeckService {
       message:
         'O baralho foi criado com sucesso, pórem ele so contem criatura e um commander, terá que adicioanr o terrenos e magias.',
     };
+  }
+
+  async updateDeck(deckId: string, updateDeckDto: UpdateDeckDto): Promise<Deck> {
+
+    const updatedDeck = await this.deckModel.findByIdAndUpdate(
+      deckId,
+      updateDeckDto,
+      { new: true },
+    );
+
+    if (!updatedDeck) {
+      throw new Error('Deck not found');
+    }
+
+    const notification = {
+
+      type: 'Atualização',
+      deckId,
+      updatedDeck,
+    };
+
+    console.log("Notificação: ", notification)
+    this.client.emit('deck_import_queue', notification);
+
+    return updatedDeck;
   }
 
   async processImport(deckJson: any, clientId: string) {
