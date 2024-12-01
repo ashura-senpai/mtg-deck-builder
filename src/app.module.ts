@@ -11,6 +11,7 @@ import { AppController } from './app.controller';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { DeckService } from './deck/deck.service';
+import { MetricsModule } from './metrics/metrics.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DeckService } from './deck/deck.service';
     DeckModule,
     UsersModule,
     AuthModule,
+    MetricsModule,
     CacheModule.register({
       ttl: 5,
       max: 50,
@@ -39,4 +41,4 @@ import { DeckService } from './deck/deck.service';
   controllers: [CardsController, DeckController, AppController],
   providers: [CardsService, DeckService, AppService],
 })
-export class AppModule {}
+export class AppModule { }

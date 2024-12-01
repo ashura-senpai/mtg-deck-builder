@@ -17,7 +17,7 @@ export class DeckService {
     @InjectModel(Deck.name) private deckModel: Model<Deck>,
     @Inject('DECK_IMPORT_QUEUE') private client: ClientProxy,
     private readonly deckGateway: DeckGateway,
-  ) {}
+  ) { }
 
   async findByUserId(userId: string): Promise<Deck[]> {
     return this.deckModel.find({ owner: userId }).exec();
